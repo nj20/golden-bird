@@ -5,11 +5,10 @@ hooks:
     - location: /node/bin/stop.sh
       timeout: 600
       runas: root
-  Install:
+  ApplicationStart:
     - location: /node/bin/install_dependencies.sh
       timeout: 600
       runas: root
-  ApplicationStart:
     - location: /node/bin/start.sh
       timeout: 600
       runas: root
