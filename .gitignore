@@ -61,10 +61,10 @@ typings/
 .idea
 
 # Keys
-.pem
+*.pem
 
 #MAC
-.DS_Store
+*.DS_Store
 
 #Nohup
-.out
+*.out
