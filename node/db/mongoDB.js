@@ -1,36 +1,37 @@
 //This module is used to manipulate data in database
-
 var mongoDriver = require('./mongoDriver');
+
+//Gets the database connection
 var db;
+mongoDriver.connect().then(function (database)
+{
+    db = database;
+    fulfill(
+    {
+        "message": "connected with mongoDB"
+    })
+}, function (err)
+{
+    reject(err);
+});
 
 module.exports =
 {
-    //Needs to be called at least once before making any other request
-    connect: function()
+    insertOne: function(collection, json)
     {
         return new Promise(function(fulfill, reject)
         {
-            if(db != null)
+            db.collection(collection).insertOne(json, function(err, result)
             {
-                fulfill(
-                {
-                    "message": "Already connected with mongoDB"
-                })
-            }
-            else
-            {
-                mongoDriver.connect().then(function (database)
-                {
-                    db = database;
-                    fulfill(
-                    {
-                        "message": "connected with mongoDB"
-                    })
-                }, function (err)
+                if(err)
                 {
                     reject(err);
-                });
-            }
+                }
+                else
+                {
+                    fulfill(result);
+                }
+            });
         });
     }
 }
