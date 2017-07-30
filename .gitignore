@@ -65,3 +65,6 @@ typings/
 
 #MAC
 .DS_Store
+
+#Nohup
+.out

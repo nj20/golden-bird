@@ -25,6 +25,4 @@ fi
 
 source ../config/${environment}.env
 
-cd ..
-npm install
-PORT=${port} nohup npm start &
+kill -9 $(lsof -i:${port} -t)

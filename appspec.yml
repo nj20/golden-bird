@@ -1,0 +1,15 @@
+version: 0.0
+os: ubuntu 
+hooks:
+  ApplicationStop:
+    - location: /node/bin/stop.sh
+      timeout: 600
+      runas: root
+  Install:
+    - location: /node/bin/install_dependencies.sh
+      timeout: 600
+      runas: root
+  ApplicationStart:
+    - location: /node/bin/start.sh
+      timeout: 600
+      runas: root
