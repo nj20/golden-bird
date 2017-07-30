@@ -3,16 +3,13 @@ var mongoDriver = require('./mongoDriver');
 
 //Gets the database connection
 var db;
+
 mongoDriver.connect().then(function (database)
 {
     db = database;
-    fulfill(
-    {
-        "message": "connected with mongoDB"
-    })
 }, function (err)
 {
-    reject(err);
+    console.log(err);
 });
 
 module.exports =
@@ -33,5 +30,29 @@ module.exports =
                 }
             });
         });
+    },
+
+    dropDatabase: function()
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.dropDatabase(function(err)
+            {
+                if(err)
+                {
+                    reject(err);
+                }
+                else
+                {
+                    fulfill();
+                }
+            });
+        });
+    },
+
+    //Returns true if ready, returns false if not ready
+    status: function()
+    {
+        return db != null;
     }
 }

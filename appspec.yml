@@ -12,3 +12,6 @@ hooks:
     - location: /node/bin/start.sh
       timeout: 600
       runas: root
+    - location: /node/bin/test.sh
+      timeout: 600
+      runas: root
