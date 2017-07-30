@@ -16,7 +16,7 @@ router.post('/', function(req, res, next)
             res.statusCode = 200;
             res.json(
             {
-                "message": "Added Restaurant"
+                "message": "Added restaurant"
             });
         }, function(err)
         {
