@@ -6,9 +6,4 @@ cd ${dir}
 
 source ../config/${DEPLOYMENT_GROUP_NAME}.env
 
-if [[ -z $(lsof -i:${port} -t) ]]
-    then
-        echo "Server is not listening on port" ${port}
-    else
-        kill -9 $(lsof -i:${port} -t)
-fi
+kill -9 $(lsof -i:${PORT} -t) 2> /dev/null
