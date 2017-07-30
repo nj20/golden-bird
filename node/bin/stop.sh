@@ -6,4 +6,4 @@ cd ${dir}
 
 source ../config/${DEPLOYMENT_GROUP_NAME}.env
 
-kill -9 $(lsof -i:${port} -t)
+kill -9 $(lsof -i:${port} -t) 2> /dev/null
