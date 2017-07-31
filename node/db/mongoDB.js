@@ -1,6 +1,5 @@
 //This module is used to manipulate data in database
 var mongoDriver = require('./mongoDriver');
-var ObjectID = require('mongodb').ObjectID;
 
 //Gets the database connection
 var db;
@@ -19,14 +18,13 @@ module.exports =
     {
         return new Promise(function(fulfill, reject)
         {
-            console.log(json._id)
             db.collection(collection).find({"_id": json._id}, function(err, res)
             {
                 res.count().then(function(count)
                 {
                     if(count > 0)
                     {
-                        reject(
+                        fulfill(
                         {
                             status: 409,
                             message: "id already exists"
@@ -39,15 +37,19 @@ module.exports =
                             if (err)
                             {
                                 console.log(err);
-                                reject(
-                                    {
-                                        status: 500,
-                                        message: "internal server error"
-                                    })
+                                fulfill(
+                                {
+                                    status: 500,
+                                    message: "internal server error"
+                                })
                             }
                             else
                             {
-                                fulfill(result);
+                                fulfill(
+                                {
+                                    status: 201,
+                                    message: "Added entity"
+                                });
                             }
                         });
                     }
@@ -64,11 +66,20 @@ module.exports =
             {
                 if(err)
                 {
-                    reject(err);
+                    console.log(err);
+                    fulfill(
+                    {
+                        status: 500,
+                        message: "internal server error"
+                    });
                 }
                 else
                 {
-                    fulfill();
+                    fulfill(
+                    {
+                        status: 200,
+                        message: "deleted database"
+                    });
                 }
             });
         });
