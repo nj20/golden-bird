@@ -3,9 +3,9 @@ var collection= 'restaurant';
 
 module.exports =
 {
-    add: function(name, description)
+    add: function(restaurant)
     {
-        return  db.insertOne(collection, {"name": name, "description": description});
+        return  db.insertOne(collection, restaurant);
     },
 
     setDB: function(database)

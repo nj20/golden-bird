@@ -1,5 +1,6 @@
 //This module is used to manipulate data in database
 var mongoDriver = require('./mongoDriver');
+var ObjectID = require('mongodb').ObjectID;
 
 //Gets the database connection
 var db;
@@ -18,16 +19,39 @@ module.exports =
     {
         return new Promise(function(fulfill, reject)
         {
-            db.collection(collection).insertOne(json, function(err, result)
+            console.log(json._id)
+            db.collection(collection).find({"_id": json._id}, function(err, res)
             {
-                if(err)
+                res.count().then(function(count)
                 {
-                    reject(err);
-                }
-                else
-                {
-                    fulfill(result);
-                }
+                    if(count > 0)
+                    {
+                        reject(
+                        {
+                            status: 409,
+                            message: "id already exists"
+                        })
+                    }
+                    else
+                    {
+                        db.collection(collection).insertOne(json, function (err, result)
+                        {
+                            if (err)
+                            {
+                                console.log(err);
+                                reject(
+                                    {
+                                        status: 500,
+                                        message: "internal server error"
+                                    })
+                            }
+                            else
+                            {
+                                fulfill(result);
+                            }
+                        });
+                    }
+                });
             });
         });
     },

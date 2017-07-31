@@ -9,19 +9,19 @@ var router = express.Router();
 
 router.post('/', function(req, res, next)
 {
-    if(verifyBody(req, ["name", "description"]))
+    if(verifyBody(req, ["name", "description", "location", "_id", "password"]))
     {
-        restaurant.add(req.body["name"], req.body["description"]).then(function(result)
+        restaurant.add(req.body).then(function(result)
         {
-            res.statusCode = 200;
+            res.statusCode = 201;
             res.json(
             {
                 "message": "Added restaurant"
             });
         }, function(err)
         {
-            console.log(err);
-            respondWith.internalError(res);
+            res.statusCode = err.status;
+            res.json({message: err.message});
         });
     }
     else
