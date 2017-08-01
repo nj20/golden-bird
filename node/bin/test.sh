@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 #Getting this file's directory
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd ${dir}
