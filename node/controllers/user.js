@@ -2,7 +2,7 @@ var verifyJson = require("../util/verifyJson");
 var randomstring = require("randomstring");
 var crypto = require('crypto');
 var db;
-var collection= 'user';
+var collection = 'user';
 
 module.exports =
 {
@@ -10,6 +10,7 @@ module.exports =
     {
         return new Promise(function(fulfill, reject)
         {
+            //Checks is user has _id, password and type field
             if(verifyJson(user, ["_id", "password", "type"]))
             {
                 //Creating salt and hashing the password
@@ -34,8 +35,50 @@ module.exports =
         });
     },
 
+    getUser: function(userId)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.find(collection, {"_id": userId}).then(function(result)
+            {
+                result.body.toArray(function(err, user)
+                {
+                    if(user.length > 0)
+                    {
+                        fulfill(
+                        {
+                            status: 200,
+                            body: user[0]
+                        })
+                    }
+                    else
+                    {
+                        fulfill(
+                            {
+                                status: 404,
+                                body: "user not found"
+                            })
+                    }
+                });
+            }, function(err)
+            {
+                console.log(err);
+                fulfill(
+                {
+                    status: 500,
+                    body: "internal server error"
+                })
+            })
+        });
+    },
+
     setDB: function(database)
     {
         db = database;
+    },
+
+    collectionName: function()
+    {
+        return collection;
     }
 }

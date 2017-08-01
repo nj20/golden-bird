@@ -11,7 +11,7 @@ router.post('/', function(req, res, next)
         res.statusCode = result.status;
         res.json(
         {
-            "message": result.message
+            "body": result.body
         });
     });
 });

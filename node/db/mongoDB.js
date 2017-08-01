@@ -27,7 +27,7 @@ module.exports =
                         fulfill(
                         {
                             status: 409,
-                            message: "id already exists"
+                            body: "id already exists"
                         })
                     }
                     else
@@ -40,7 +40,7 @@ module.exports =
                                 fulfill(
                                 {
                                     status: 500,
-                                    message: "internal server error"
+                                    body: "internal server error"
                                 })
                             }
                             else
@@ -48,12 +48,66 @@ module.exports =
                                 fulfill(
                                 {
                                     status: 201,
-                                    message: "Added entity"
+                                    body: "Added entity"
                                 });
                             }
                         });
                     }
                 });
+            });
+        });
+    },
+
+    find: function(collection, query)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.collection(collection).find(query, function(err, result)
+            {
+                if(err)
+                {
+                    console.log(err);
+                    fulfill(
+                    {
+                        status: 500,
+                        body: "internal server error"
+                    });
+                }
+                else
+                {
+                    fulfill(
+                    {
+                        status: 200,
+                        body: result
+                    });
+                }
+            });
+        });
+    },
+
+    delete: function(collection, query)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.collection(collection).deleteMany(query, function(err, result)
+            {
+                if(err)
+                {
+                    console.log(err);
+                    fulfill(
+                    {
+                        status: 500,
+                        body: "internal server error"
+                    });
+                }
+                else
+                {
+                    fulfill(
+                    {
+                        status: 200,
+                        body: result
+                    });
+                }
             });
         });
     },
@@ -70,7 +124,7 @@ module.exports =
                     fulfill(
                     {
                         status: 500,
-                        message: "internal server error"
+                        body: "internal server error"
                     });
                 }
                 else
@@ -78,7 +132,7 @@ module.exports =
                     fulfill(
                     {
                         status: 200,
-                        message: "deleted database"
+                        body: "deleted database"
                     });
                 }
             });
