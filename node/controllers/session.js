@@ -1,5 +1,6 @@
 //A session represents a login session for a user.
 //Each session can start and end.
+//Before using session, you need to set DB and UserController
 
 var verifyJson = require("../util/verifyJson");
 var randomstring = require("randomstring");
@@ -56,6 +57,45 @@ module.exports =
                     body: "Missing one or more fields in body"
                 });
             }
+        });
+    },
+
+    getUserFromSessionKey: function(sessionKey)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.find(collection, {"_id": sessionKey}).then(function(result)
+            {
+                result.body.toArray().then(function(session)
+                {
+                    if(session.length != 0)
+                    {
+                        if(session[0].endTime <= Date.now())
+                        {
+                            fulfill(
+                            {
+                                status: 401,
+                                body: "Session expired"
+                            });
+                        }
+                        else
+                        {
+                            userController.getUser(session[0].userId).then(function(userSearchResult)
+                            {
+                                fulfill(userSearchResult);
+                            });
+                        }
+                    }
+                    else
+                    {
+                        fulfill(
+                        {
+                            status: 401,
+                            body: "invalid token"
+                        });
+                    }
+                });
+            });
         });
     },
 

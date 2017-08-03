@@ -8,6 +8,7 @@ var user = require('./routes/user');
 var restaurant = require('./routes/restaurant');
 var index = require('./routes/index');
 var util = require('./routes/util');
+var auth = require('./middleware/authentication');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api', auth);
 app.use('/api/', index);
 app.use('/api/util', util);
 app.use('/api/user', user);

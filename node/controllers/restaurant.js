@@ -1,6 +1,9 @@
+//Before using restaurant, you need to set DB
+
 var verifyJson = require("../util/verifyJson");
 var ObjectID = require('mongodb').ObjectID;
 var db;
+var userController;
 var collection= 'restaurant';
 
 module.exports =
@@ -9,16 +12,29 @@ module.exports =
     {
         return new Promise(function(fulfill, reject)
         {
+            console.log(restaurant);
             //Checking if restaurant has name, description and location
-            if(verifyJson(restaurant, ["name", "description", "location"]))
+            if(verifyJson(restaurant, ["name", "description", "location", "user"]))
             {
-                //Creating new ID
-                var objectId = new ObjectID();
-                restaurant._id = objectId.toHexString();
-                db.insertOne(collection, restaurant).then(function(result)
+                //If user is restaurant manager
+                if(restaurant.user.type == userController.restaurantOwner())
                 {
-                    fulfill(result);
-                });
+                    //Creating new ID
+                    var objectId = new ObjectID();
+                    restaurant._id = objectId.toHexString();
+                    db.insertOne(collection, restaurant).then(function(result)
+                    {
+                        fulfill(result);
+                    });
+                }
+                else
+                {
+                    fulfill(
+                    {
+                        status: 401,
+                        body: "Not Authorized"
+                    });
+                }
             }
             else
             {
@@ -34,6 +50,11 @@ module.exports =
     setDB: function(database)
     {
         db = database;
+    },
+
+    setUserController: function(userContr)
+    {
+        userController = userContr;
     },
 
     collectionName: function()

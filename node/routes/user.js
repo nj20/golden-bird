@@ -1,17 +1,17 @@
 var express = require('express');
 var db = require("../db/mongoDB");
-var user = require("../controllers/user");
-var session = require("../controllers/session");
+var userController = require("../controllers/user");
+var sessionController = require("../controllers/session");
 
-user.setDB(db);
-session.setDB(db);
-session.setUserController(user);
+userController.setDB(db);
+sessionController.setDB(db);
+sessionController.setUserController(userController);
 
 var router = express.Router();
 
 router.post('/', function(req, res, next)
 {
-    user.add(req.body).then(function(result)
+    userController.add(req.body).then(function(result)
     {
         res.statusCode = result.status;
         res.json(
@@ -23,7 +23,7 @@ router.post('/', function(req, res, next)
 
 router.post('/login', function(req, res, next)
 {
-    session.startNewSession(req.body).then(function(result)
+    sessionController.startNewSession(req.body).then(function(result)
     {
         res.statusCode = result.status;
         res.json(

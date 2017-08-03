@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require("../db/mongoDB");
 
-if(process.env.environment != "prod")
+if(process.env.environment == "qe")
 {
     router.delete('/database', function (req, res, next)
     {

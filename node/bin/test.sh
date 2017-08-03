@@ -10,7 +10,7 @@ cd ..
 source ./config/${DEPLOYMENT_GROUP_NAME}.env
 
 #Running integration tests
-./node_modules/mocha/bin/mocha --recursive
+./node_modules/mocha/bin/mocha test/integration/restaurant.js
 
 #waits until the API is ready
 while [[ $(curl -s 'localhost/api/') != *'"available":true'* ]]

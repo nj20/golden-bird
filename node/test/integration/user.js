@@ -31,7 +31,7 @@ describe('User', function()
         {
             "_id": "nj20",
             "password": "1234",
-            "type": "customer"
+            "type": "0"
         }
 
         user.add(userData).then(function(addResult)
@@ -44,7 +44,7 @@ describe('User', function()
                     {
                         expect(addResult.status).to.equal(201);
                         expect(searchResultArray.length).to.equal(1);
-                        expect(searchResultArray[0]).to.deep.include(userData);
+                        expect(searchResultArray[0]).to.deep.include({"_id": userData._id});
                         done();
                     }catch(e){done(e)}
                 });

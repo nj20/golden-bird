@@ -34,12 +34,12 @@ describe('User', function()
         {
             "_id": "nj20",
             "password": "1234",
-            "type": "customer"
+            "type": "0"
         }
 
         user.add(userData).then(function(addResult)
         {
-            session.startNewSession({"_id": "nj20", "password": "1234"}).then(function(sessionKey)
+            session.startNewSession({"_id": userData._id, "password": userData.password}).then(function(sessionKey)
             {
                 try
                 {
@@ -57,14 +57,14 @@ describe('User', function()
         {
             "_id": "nj20",
             "password": "1234",
-            "type": "customer"
+            "type": "0"
         }
 
         user.add(userData).then(function(addResult)
         {
-            session.startNewSession({"_id": "nj20", "password": "1234"}).then(function(sessionKey)
+            session.startNewSession({"_id": userData._id, "password": userData.password}).then(function(sessionKey)
             {
-                session.startNewSession({"_id": "nj20", "password": "1234"}).then(function(newSessionKey)
+                session.startNewSession({"_id": userData._id, "password": userData.password}).then(function(newSessionKey)
                 {
                     db.find(session.collectionName(), {}).then(function(searchResult)
                     {
@@ -91,12 +91,12 @@ describe('User', function()
         {
             "_id": "nj20",
             "password": "1234",
-            "type": "customer"
+            "type": "0"
         }
 
         user.add(userData).then(function(addResult)
         {
-            session.startNewSession({"_id": "nj201", "password": "1234"}).then(function(error)
+            session.startNewSession({"_id": userData._id + "2342", "password": userData.password}).then(function(error)
             {
                 db.find(session.collectionName(), {}).then(function(searchResult)
                 {
@@ -120,12 +120,12 @@ describe('User', function()
         {
             "_id": "nj20",
             "password": "1234",
-            "type": "customer"
+            "type": "0"
         }
 
         user.add(userData).then(function(addResult)
         {
-            session.startNewSession({"_id": "nj20", "password": "12345"}).then(function(error)
+            session.startNewSession({"_id": userData._id, "password": userData.password + "werdsf"}).then(function(error)
             {
                 db.find(session.collectionName(), {}).then(function(searchResult)
                 {
@@ -138,6 +138,129 @@ describe('User', function()
                             done();
                         }catch(e){done(e)}
                     })
+                });
+            });
+        });
+    });
+
+    it('can be retrieved from session key', function(done)
+    {
+        var userData =
+        {
+            "_id": "nj20",
+            "password": "1234",
+            "type": "0"
+        }
+        var userData2 =
+        {
+            "_id": "nj204",
+            "password": "1234",
+            "type": "0"
+        }
+
+        user.add(userData).then(function(addResult)
+        {
+            user.add(userData2).then(function(addResult2)
+            {
+                session.startNewSession({"_id": userData._id, "password": userData.password}).then(function (sessionKey)
+                {
+                    session.getUserFromSessionKey(sessionKey.body.sessionKey).then(function (searchedUser)
+                    {
+                        try
+                        {
+                            expect(searchedUser.body).to.include({"_id": userData._id});
+                            done();
+                        }catch(e){done(e)}
+                    });
+                });
+            });
+        });
+    });
+
+    it('cannot be retrieved from expired session key', function(done)
+    {
+        var userData =
+        {
+            "_id": "nj20",
+            "password": "1234",
+            "type": "0"
+        }
+        //Setting the login session time to 1 second
+        var defaultSessionTime = process.env.defaultLogInSessionTime;
+        process.env.defaultLogInSessionTime = 1;
+
+        user.add(userData).then(function(addResult)
+        {
+            session.startNewSession({"_id": userData._id, "password": userData.password}).then(function (sessionKey)
+            {
+                setTimeout(function()
+                {
+                    session.getUserFromSessionKey(sessionKey.body.sessionKey).then(function (searchedUser)
+                    {
+                        try
+                        {
+                            process.env.defaultLogInSessionTime = defaultSessionTime;
+                            expect(searchedUser.status).to.equal(401);
+                            done();
+                        }catch(e)
+                        {
+                            process.env.defaultLogInSessionTime = defaultSessionTime;
+                            done(e);
+                        }
+                    });
+                }, (process.env.defaultLogInSessionTime) * 1000)
+            });
+        });
+    });
+
+    it('cannot be retrieved from invalid sessionkey', function(done)
+    {
+        var userData =
+        {
+            "_id": "nj20",
+            "password": "1234",
+            "type": "0"
+        }
+
+        user.add(userData).then(function(addResult)
+        {
+            session.startNewSession({"_id": userData._id, "password": userData.password}).then(function (sessionKey)
+            {
+                session.getUserFromSessionKey("54545").then(function (searchedUser)
+                {
+                    try
+                    {
+                        expect(searchedUser.status).to.equal(401);
+                        done();
+                    }catch(e){done(e)}
+                });
+            });
+        });
+    });
+
+    it('cannot be retrieved from sessionkey if user got deleted', function(done)
+    {
+        var userData =
+        {
+            "_id": "nj20",
+            "password": "1234",
+            "type": "0"
+        }
+
+        user.add(userData).then(function(addResult)
+        {
+            session.startNewSession({"_id": userData._id, "password": userData.password}).then(function (sessionKey)
+            {
+                db.delete(user.collectionName(), {"_id": userData._id}).then(function(res)
+                {
+                    session.getUserFromSessionKey(sessionKey.body.sessionKey).then(function (searchedUser)
+                    {
+                        try
+                        {
+                            expect(searchedUser.status).to.equal(404);
+                            done();
+                        }catch(e){done(e)}
+                    });
                 });
             });
         });

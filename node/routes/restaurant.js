@@ -1,19 +1,31 @@
 var express = require('express');
 var db = require("../db/mongoDB");
-var restaurant = require("../controllers/restaurant");
-restaurant.setDB(db);
+var restaurantController = require("../controllers/restaurant");
+restaurantController.setDB(db);
 var router = express.Router();
 
 router.post('/', function(req, res, next)
 {
-    restaurant.add(req.body).then(function(result)
+    if(req.headers.authStatus == 200)
     {
-        res.statusCode = result.status;
+        req.body.user = req.headers.user;
+        restaurantController.add(req.body).then(function(result)
+        {
+            res.statusCode = result.status;
+            res.json(
+            {
+                "body": result.body
+            });
+        });
+    }
+    else
+    {
+        res.statusCode = 401;
         res.json(
         {
-            "body": result.body
+            "body": "Not Authorized. Please provide valid sessionKey in headers"
         });
-    });
+    }
 });
 
 module.exports = router;
