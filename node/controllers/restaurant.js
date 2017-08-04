@@ -23,7 +23,6 @@ module.exports =
                     restaurant._id = objectId.toHexString();
                     db.insertOne(collection, restaurant).then(function(result)
                     {
-                        console.log(result);
                         fulfill(result);
                     });
                 }

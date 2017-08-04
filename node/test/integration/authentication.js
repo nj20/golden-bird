@@ -54,14 +54,14 @@ describe('User', function()
                     {
                         headers:
                         {
-                            sessionKey: sessionKey.body.sessionKey
+                            sessionkey: sessionKey.body.sessionKey
                         }
                     };
                     authentication(request, {}, function()
                     {
                         try
                         {
-                            expect(request.headers.userId).to.equal(userData._id);
+                            expect(request.headers.user._id).to.equal(userData._id);
                             expect(request.headers.authStatus).to.equal(200);
                             done();
                         }catch(e){done(e)}
@@ -93,7 +93,7 @@ describe('User', function()
                     {
                         headers:
                         {
-                            sessionKey: sessionKey.body.sessionKey
+                            sessionkey: sessionKey.body.sessionKey
                         }
                     };
                     authentication(request, {}, function()
@@ -131,7 +131,7 @@ describe('User', function()
                 {
                     headers:
                     {
-                        sessionKey: "54545454"
+                        sessionkey: "54545454"
                     }
                 };
                 authentication(request, {}, function()
@@ -168,7 +168,7 @@ describe('User', function()
                     {
                         headers:
                         {
-                            sessionKey: sessionKey.body.sessionKey
+                            sessionkey: sessionKey.body.sessionKey
                         }
                     };
                     authentication(request, {}, function()

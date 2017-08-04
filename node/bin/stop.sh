@@ -6,4 +6,4 @@ cd ${dir}
 
 source ../config/${DEPLOYMENT_GROUP_NAME}.env
 
-forever stop bin/www
+forever stopall
