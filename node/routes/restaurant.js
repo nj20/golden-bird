@@ -1,7 +1,10 @@
 var express = require('express');
 var db = require("../db/mongoDB");
 var restaurantController = require("../controllers/restaurant");
+var userController = require("../controllers/user");
 restaurantController.setDB(db);
+userController.setDB(db);
+restaurantController.setUserController(userController);
 var router = express.Router();
 
 router.post('/', function(req, res, next)

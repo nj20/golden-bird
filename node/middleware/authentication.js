@@ -7,11 +7,10 @@ sessionController.setUserController(userController);
 
 module.exports = function(req, res, next)
 {
-    if(req.headers["sessionKey"] != undefined)
+    if(req.headers["sessionkey"] != undefined)
     {
-        sessionController.getUserFromSessionKey(req.headers["sessionKey"]).then(function(result)
+        sessionController.getUserFromSessionKey(req.headers["sessionkey"]).then(function(result)
         {
-            console.log(result);
             if(result.status == 200)
             {
                 req.headers["authStatus"] = 200;

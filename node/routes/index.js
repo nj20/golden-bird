@@ -6,7 +6,7 @@ router.get('/', function(req, res, next)
 {
     res.json(
     {
-        api: "Golden Bird",
+        api: "Golden-Bird",
         available: db.status()
     });
 });
