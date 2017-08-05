@@ -21,4 +21,3 @@ done
 #Running acceptance tests
 newman run https://www.getpostman.com/collections/f503ecb279a0f3c74ba4
 
-

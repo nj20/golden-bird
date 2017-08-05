@@ -46,13 +46,12 @@ describe('Restaurant', function()
         {
             "name": "Nandos",
             "description": "Tasty",
-            "location": "St. Andrews",
-            "user": userData
+            "location": "St. Andrews"
         }
 
         userController.add(userData).then(function(addResult)
         {
-            restaurant.add(restaurantData).then(function(addResult)
+            restaurant.add(userData, restaurantData).then(function(addResult)
             {
                 db.find(restaurant.collectionName(), {"name": restaurantData.name}).then(function(searchResult)
                 {

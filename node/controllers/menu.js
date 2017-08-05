@@ -8,20 +8,19 @@ var collection= 'restaurant';
 
 module.exports =
 {
-    add: function(user, restaurant)
+    add: function(restaurant)
     {
         return new Promise(function(fulfill, reject)
         {
             //Checking if restaurant has name, description and location
-            if(verifyJson(restaurant, ["name", "description", "location"]))
+            if(verifyJson(restaurant, ["name", "description", "location", "user"]))
             {
                 //If user is restaurant manager
-                if(user.type == userController.restaurantOwner())
+                if(restaurant.user.type == userController.restaurantOwner())
                 {
                     //Creating new ID
                     var objectId = new ObjectID();
                     restaurant._id = objectId.toHexString();
-                    restaurant.userId = user._id;
                     db.insertOne(collection, restaurant).then(function(result)
                     {
                         fulfill(result);
@@ -44,31 +43,6 @@ module.exports =
                     body: "Missing one or more fields in body"
                 });
             }
-        });
-    },
-
-    getAll: function(user)
-    {
-        return new Promise(function(fulfill, reject)
-        {
-            db.find(collection, {"userId": user._id}).then(function(result)
-            {
-                if(result.status == 200)
-                {
-                    result.body.toArray().then(function(restaurants)
-                    {
-                        fulfill(
-                        {
-                            status: 200,
-                            body: restaurants
-                        })
-                    });
-                }
-                else
-                {
-                    fulfill(result);
-                }
-            });
         });
     },
 

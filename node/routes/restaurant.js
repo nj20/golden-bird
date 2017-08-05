@@ -11,8 +11,7 @@ router.post('/', function(req, res, next)
 {
     if(req.headers.authStatus == 200)
     {
-        req.body.user = req.headers.user;
-        restaurantController.add(req.body).then(function(result)
+        restaurantController.add(req.headers.user, req.body).then(function(result)
         {
             res.statusCode = result.status;
             res.json(
@@ -28,6 +27,30 @@ router.post('/', function(req, res, next)
         {
             "body": "Not Authorized. Please provide valid sessionKey in headers"
         });
+    }
+});
+
+
+router.get('/all', function(req, res, next)
+{
+    if(req.headers.authStatus == 200)
+    {
+        restaurantController.getAll(req.headers.user).then(function(result)
+        {
+            res.statusCode = result.status;
+            res.json(
+            {
+                "body": result.body
+            });
+        });
+    }
+    else
+    {
+        res.statusCode = 401;
+        res.json(
+            {
+                "body": "Not Authorized. Please provide valid sessionKey in headers"
+            });
     }
 });
 
