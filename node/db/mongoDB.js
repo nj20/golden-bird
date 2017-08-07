@@ -1,7 +1,8 @@
-//This module is used to manipulate data in database
+/*
+ This module is used to manipulate data in database.
+ Call the status method to make sure that this module is ready for use. If it returns false, wait for it to become true.
+*/
 var mongoDriver = require('./mongoDriver');
-
-//Gets the database connection
 var db;
 
 mongoDriver.connect().then(function (database)
@@ -14,6 +15,12 @@ mongoDriver.connect().then(function (database)
 
 module.exports =
 {
+    /**
+     *
+     * @param {string} collection - Name of the collection
+     * @param {*} json - Document to be added
+     * @returns {Promise}
+     */
     insertOne: function(collection, json)
     {
         return new Promise(function(fulfill, reject)
@@ -58,6 +65,12 @@ module.exports =
         });
     },
 
+    /**
+     *
+     * @param {string} collection - Name of the collection
+     * @param {object} query - Filter. (Check Mongodb documentation)
+     * @returns {Promise}
+     */
     find: function(collection, query)
     {
         return new Promise(function(fulfill, reject)
@@ -85,6 +98,12 @@ module.exports =
         });
     },
 
+    /**
+     *
+     * @param {string} collection - Name of the collection
+     * @param {object} query - Filter. (Check Mongodb documentation)
+     * @returns {Promise}
+     */
     delete: function(collection, query)
     {
         return new Promise(function(fulfill, reject)
@@ -112,6 +131,44 @@ module.exports =
         });
     },
 
+    /**
+     *
+     * @param {string} collection - Name of the collection
+     * @param {object} query - Filter. (Check Mongodb documentation)
+     * @param {object} update - update query including operators (Check Mongodb documentation)
+     * @returns {Promise}
+     */
+    updateOne: function(collection, query, update)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.collection(collection).updateOne(query, update, {"upsert": true}, function(err, result)
+            {
+                if(err)
+                {
+                    console.log(err);
+                    fulfill(
+                        {
+                            status: 500,
+                            body: "internal server error"
+                        });
+                }
+                else
+                {
+                    fulfill(
+                        {
+                            status: 200,
+                            body: result
+                        });
+                }
+            });
+        });
+    },
+
+    /**
+     * Deletes the whole database
+     * @returns {Promise}
+     */
     dropDatabase: function()
     {
         return new Promise(function(fulfill, reject)
@@ -139,7 +196,10 @@ module.exports =
         });
     },
 
-    //Returns true if ready, returns false if not ready
+    /**
+     * Returns true if ready, returns false if not ready
+     * @returns {boolean}
+     */
     status: function()
     {
         return db != null;

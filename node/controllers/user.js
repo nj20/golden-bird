@@ -1,4 +1,23 @@
-//Before using user, you need to set DB
+/*
+Before using user, you need to set DB
+User can be a customer or restaurant owner
+
+ External User Structure (Structure of user when using the interface):
+ {
+    _id: string,
+    password: string,
+    type: string
+ }
+
+ Internal User Structure (Structure of user when using the interface):
+ {
+     _id: string,
+     password: string (hashed),
+     salt: string,
+     type: string
+ }
+
+*/
 
 var verifyJson = require("../util/verifyJson");
 var randomstring = require("randomstring");
@@ -8,6 +27,11 @@ var collection = 'user';
 
 module.exports =
 {
+    /**
+     *
+     * @param user
+     * @returns {Promise}
+     */
     add: function(user)
     {
         var userController = this;
@@ -51,6 +75,11 @@ module.exports =
         });
     },
 
+    /**
+     *
+     * @param userId
+     * @returns {Promise}
+     */
     getUser: function(userId)
     {
         return new Promise(function(fulfill, reject)
@@ -98,11 +127,19 @@ module.exports =
         return collection;
     },
 
+    /**
+     * Represents a customer. If the user type is equal to this, its a customer.
+     * @returns {string}
+     */
     customer: function()
     {
         return "0";
     },
 
+    /**
+     * Represents a restaurant owner. If the user type is equal to this, its a restaurant owner
+     * @returns {string}
+     */
     restaurantOwner: function()
     {
         return "1";

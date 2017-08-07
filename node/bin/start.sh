@@ -1,5 +1,6 @@
 #!/bin/bash
-#Used to start the server
+# This script works on MAC and LINUX
+# Used to start the server
 
 #Getting this file's directory
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script runs on MAC and LINUX
+# Runs integration and acceptance tests from localhost.
 
 set -e
 

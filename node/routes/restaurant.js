@@ -1,12 +1,20 @@
+/**
+ * This module is used to work with adding, removing and getting restaurants
+ */
+
 var express = require('express');
 var db = require("../db/mongoDB");
 var restaurantController = require("../controllers/restaurant");
 var userController = require("../controllers/user");
+var router = express.Router();
+
 restaurantController.setDB(db);
 userController.setDB(db);
 restaurantController.setUserController(userController);
-var router = express.Router();
 
+/**
+ * Adds a restaurant (Look at postman documentation)
+ */
 router.post('/', function(req, res, next)
 {
     if(req.headers.authStatus == 200)
@@ -30,7 +38,9 @@ router.post('/', function(req, res, next)
     }
 });
 
-
+/**
+ * Gets all restaurants of given user.
+ */
 router.get('/all', function(req, res, next)
 {
     if(req.headers.authStatus == 200)

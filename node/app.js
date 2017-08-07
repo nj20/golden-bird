@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var user = require('./routes/user');
 var restaurant = require('./routes/restaurant');
+var menu = require('./routes/menu');
 var index = require('./routes/index');
 var util = require('./routes/util');
 var auth = require('./middleware/authentication');
@@ -29,6 +30,7 @@ app.use('/api/', index);
 app.use('/api/util', util);
 app.use('/api/user', user);
 app.use('/api/restaurant', restaurant);
+app.use('/api/menu', menu);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next)

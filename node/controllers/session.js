@@ -1,6 +1,16 @@
-//A session represents a login session for a user.
-//Each session can start and end.
-//Before using session, you need to set DB and UserController
+/*
+A session represents a login session for a user.
+Each session has an expiry date.
+Before using session, you need to set DB and UserController
+
+Session Structure:
+{
+    _id: string,
+    startTime: date,
+    endTime: date,
+    userId: string
+}
+*/
 
 var verifyJson = require("../util/verifyJson");
 var randomstring = require("randomstring");

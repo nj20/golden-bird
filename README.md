@@ -15,6 +15,15 @@ This software is the back-end of an ordering app for restaurants.
 
 ## Deploying with AWS CodeDeploy
 
-The software is built to run with codedeploy. It is important to name the deployment group the same as the environment in which the software will run. An example deployment group name would be qe. This will automatically run the software with qe configurations.
+The software is built to run with codedeploy.
+
+1. Create and setup new codedeploy project.
+2. Link the codedeploy to the github project.
+3. Name the deployment group name as qe/stage/production
+4. The configuration for each of these environments are available in node/config folder.
+
+## Structure Of Code 
+
+The code follows a MVC pattern. The API calls are redirected to middlewares where functions like authentications are performed and then are redirected to the routes where the api calls are processed. The routes make calls to controllers which inturn make calls to database. 
 
  
