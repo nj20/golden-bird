@@ -9,6 +9,7 @@ var restaurant = require('./routes/restaurant');
 var menu = require('./routes/menu');
 var index = require('./routes/index');
 var util = require('./routes/util');
+var order = require('./routes/order');
 var auth = require('./middleware/authentication');
 
 var app = express();
@@ -31,6 +32,7 @@ app.use('/api/util', util);
 app.use('/api/user', user);
 app.use('/api/restaurant', restaurant);
 app.use('/api/menu', menu);
+app.use('/api/order', order);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next)

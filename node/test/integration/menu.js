@@ -298,5 +298,87 @@ describe('Menu', function()
             })
         });
     });
+
+    it('can be retrieved with restaurant id', function(done)
+    {
+
+        var userData =
+        {
+            "_id": "nj20",
+            "password": "1234",
+            "type": "1"
+        }
+
+        var restaurantData =
+        {
+            "name": "Nandos",
+            "description": "Tasty",
+            "location": "St. Andrews"
+        }
+
+        userController.add(userData).then(function(addResult)
+        {
+            restaurantController.add(userData, restaurantData).then(function(addResult)
+            {
+                db.find(restaurantController.collectionName(), {"name": restaurantData.name}).then(function(searchResult)
+                {
+                    searchResult.body.toArray().then(function(searchResult)
+                    {
+                        var restaurantId = searchResult[0]._id;
+                        menu.restaurantId = restaurantId;
+                        menuController.update(userData, menu).then(function(result)
+                        {
+                            menuController.getMenuWithRestaurantId(restaurantId).then(function(result)
+                            {
+                                expect(result.status).to.equal(200);
+                                done();
+                            });
+                        });
+                    });
+                })
+            })
+        });
+    });
+
+    it('cannot be retrieved with invalid restaurant id', function(done)
+    {
+
+        var userData =
+        {
+            "_id": "nj20",
+            "password": "1234",
+            "type": "1"
+        }
+
+        var restaurantData =
+        {
+            "name": "Nandos",
+            "description": "Tasty",
+            "location": "St. Andrews"
+        }
+
+        userController.add(userData).then(function(addResult)
+        {
+            restaurantController.add(userData, restaurantData).then(function(addResult)
+            {
+                db.find(restaurantController.collectionName(), {"name": restaurantData.name}).then(function(searchResult)
+                {
+                    searchResult.body.toArray().then(function(searchResult)
+                    {
+                        var restaurantId = searchResult[0]._id;
+                        menu.restaurantId = restaurantId;
+                        menuController.update(userData, menu).then(function(result)
+                        {
+                            menuController.getMenuWithRestaurantId(restaurantId + "ewrdf83").then(function(result)
+                            {
+                                expect(result.status).to.equal(404);
+                                done();
+                            });
+                        });
+                    });
+                })
+            })
+        });
+    });
 });
 

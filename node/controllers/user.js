@@ -6,7 +6,7 @@ User can be a customer or restaurant owner
  {
     _id: string,
     password: string,
-    type: string
+    type: string (0 = customer, 1 = owner)
  }
 
  Internal User Structure (Structure of user when using the interface):
@@ -14,7 +14,7 @@ User can be a customer or restaurant owner
      _id: string,
      password: string (hashed),
      salt: string,
-     type: string
+     type: string (0 = customer, 1 = owner)
  }
 
 */

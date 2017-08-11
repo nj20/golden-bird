@@ -21,7 +21,7 @@ To use this controller. you need to set db, userController and restaurantControl
 
 Internal Menu Structure (How the menu is actually represented):
 {
-    _id: string, (When sending menu object to menuController.update, replace this field with restaurantId)
+    _id: string, (this is the restaurantId of restaurant that owns this menu)
     sections:
     [{
         name: string
@@ -82,10 +82,7 @@ module.exports =
                                         body: "Updated menu"
                                     })
                                 }
-                                else
-                                {
-                                    fulfill(result);
-                                }
+                                else{fulfill(result);}
                             });
                         }
                         else
@@ -97,10 +94,7 @@ module.exports =
                             });
                         }
                     }
-                    else
-                    {
-                        fulfill(result)
-                    }
+                    else{fulfill(result)}
                 });
             }
             else
@@ -111,6 +105,38 @@ module.exports =
                     body: "Missing one or more fields in body"
                 });
             }
+        });
+    },
+
+    getMenuWithRestaurantId: function(id)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.find(collection, {"_id": id}).then(function(result)
+            {
+                if(result.status == 200)
+                {
+                    result.body.toArray().then(function(menus)
+                    {
+                        if(menus.length == 1)
+                        {
+                            fulfill(
+                            {
+                                status: 200,
+                                body: menus[0]
+                            })
+                        }
+                        else
+                        {
+                            fulfill(
+                            {
+                                status: 404,
+                                body: "Menu not found"
+                            });
+                        }
+                    });
+                }else{fulfill(result);}
+            });
         });
     },
 

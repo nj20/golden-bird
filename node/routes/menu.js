@@ -42,4 +42,27 @@ router.put('/', function(req, res, next)
     }
 });
 
+router.get("/", function(req, res, next)
+{
+    if(req.headers.authStatus == 200)
+    {
+        menuController.getMenuWithRestaurantId(req.headers.restaurantid).then(function(result)
+        {
+            res.statusCode = result.status;
+            res.json(
+                {
+                    "body": result.body
+                });
+        });
+    }
+    else
+    {
+        res.statusCode = 401;
+        res.json(
+            {
+                "body": "Not Authorized. Please provide valid sessionKey in headers"
+            });
+    }
+});
+
 module.exports = router;

@@ -3,8 +3,16 @@ This module is used to manipulate restaurant in database.
 Each restaurant owner (user) can add restaurants. They cannot see/manipulate restaurants they did not create.
 Before using restaurant, you need to set db and userController
 
-Restaurant Structure:
+ Restaurant External Structure: (when using the interface)
+ {
+ name: string,
+ description: string,
+ location: string
+ }
+
+Restaurant Internal Structure: (How it is represented within the module)
 {
+    _id: string,
     name: string,
     description: string,
     location: string
@@ -120,6 +128,44 @@ module.exports =
                 {
                     fulfill(result);
                 }
+            });
+        });
+    },
+
+    /**
+     * Returns restaurant that corresponds to given id. Return 404 if no restaurant is found.
+     * @param restaurantId
+     * @returns {Promise}
+     */
+    getRestaurantWithId: function(restaurantId)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.find(collection, {_id: restaurantId}).then(function(result)
+            {
+                if(result.status == 200)
+                {
+                    result.body.toArray().then(function(restaurants)
+                    {
+                        if(restaurants.length > 0)
+                        {
+                            fulfill(
+                            {
+                                status: 200,
+                                body: restaurants[0]
+                            });
+                        }
+                        else
+                        {
+                            fulfill(
+                            {
+                                status: 404,
+                                body: "restaurant not found"
+                            });
+                        }
+                    });
+                }
+                else{fulfill(result);}
             });
         });
     },

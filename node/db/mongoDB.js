@@ -4,6 +4,8 @@
 */
 var mongoDriver = require('./mongoDriver');
 var db;
+var monq = require('monq')(process.env.mongodbHost);
+var jobsQueue = "monqJobs";
 
 mongoDriver.connect().then(function (database)
 {
@@ -194,6 +196,57 @@ module.exports =
                 }
             });
         });
+    },
+
+    /**
+     * Adds a job to a queue that can then be dequeued later by registering
+     * @param queueName
+     * @param jobName
+     * @param data
+     * @returns {Promise}
+     */
+    enqueueJob: function(queueName, jobName, data)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            var queue = monq.queue(queueName);
+            queue.enqueue(jobName, data, function (err, job)
+            {
+                if(err)
+                {
+                    fulfill(
+                    {
+                        status: 500,
+                        body: err
+                    })
+                }
+                else
+                {
+                    fulfill(
+                    {
+                        status: 201,
+                        body: job
+                    });
+                }
+            });
+        });
+    },
+
+    /**
+     * Registers to a jobname.  Whenever a new job with that name is queued, func will be called
+     * @param queueName
+     * @param jobName
+     * @param func
+     * @returns worker
+     */
+    registerToJobName: function(queueName, jobName, func)
+    {
+        var worker = monq.worker([queueName]);
+        var callback = {};
+        callback[jobName] = func;
+        worker.register(callback);
+        worker.start();
+        return worker;
     },
 
     /**

@@ -6,8 +6,8 @@ Before using session, you need to set DB and UserController
 Session Structure:
 {
     _id: string,
-    startTime: date,
-    endTime: date,
+    startTime: long,
+    endTime: long,
     userId: string
 }
 */
@@ -52,11 +52,7 @@ module.exports =
                             });
                         }
                     }
-                    else
-                    {
-                        //returns the error
-                        fulfill(result);
-                    }
+                    else{fulfill(result);}
                 })
             }
             else
