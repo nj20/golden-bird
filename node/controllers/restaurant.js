@@ -102,6 +102,34 @@ module.exports =
     },
 
     /**
+     * Returns a list of ALL the restaurants
+     */
+    getAllForCustomer: function()
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.getAll(collection).then(function(result)
+            {
+                if(result.status == 200)
+                {
+                    result.body.toArray().then(function(restaurants)
+                    {
+                        fulfill(
+                        {
+                            status: 200,
+                            body: restaurants
+                        })
+                    });
+                }
+                else
+                {
+                    fulfill(result);
+                }
+            });
+        });
+    },
+
+    /**
      *
      * @param {Object} user
      * @param {string} restaurantId

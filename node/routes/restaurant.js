@@ -6,6 +6,7 @@ var express = require('express');
 var db = require("../db/mongoDB");
 var restaurantController = require("../controllers/restaurant");
 var userController = require("../controllers/user");
+var multer = require("multer");
 var router = express.Router();
 
 restaurantController.setDB(db);
@@ -63,5 +64,32 @@ router.get('/all', function(req, res, next)
             });
     }
 });
+
+/**
+ * Gets all restaurants of customer.
+ */
+router.get('/allForCustomer', function(req, res, next)
+{
+    if(req.headers.authStatus == 200)
+    {
+        restaurantController.getAllForCustomer().then(function(result)
+        {
+            res.statusCode = result.status;
+            res.json(
+            {
+                "body": result.body
+            });
+        });
+    }
+    else
+    {
+        res.statusCode = 401;
+        res.json(
+        {
+            "body": "Not Authorized. Please provide valid sessionKey in headers"
+        });
+    }
+});
+
 
 module.exports = router;

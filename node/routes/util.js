@@ -23,16 +23,5 @@ if(process.env.environment == "qe" || process.env.environment == "local")
             });
         });
     });
-
-    router.get("/test", function(req, res, next)
-    {
-        setTimeout(function()
-        {
-            console.log("HELLO WORLD");
-            console.log(res);
-            res.json({"data": "what"});
-        }, 5000);
-
-    });
 }
 module.exports = router;

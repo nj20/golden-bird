@@ -103,6 +103,38 @@ module.exports =
     /**
      *
      * @param {string} collection - Name of the collection
+     * @returns {Promise}
+     */
+    getAll: function(collection)
+    {
+        return new Promise(function(fulfill, reject)
+        {
+            db.collection(collection).find(function(err, result)
+            {
+                if(err)
+                {
+                    console.log(err);
+                    fulfill(
+                        {
+                            status: 500,
+                            body: "internal server error"
+                        });
+                }
+                else
+                {
+                    fulfill(
+                        {
+                            status: 200,
+                            body: result
+                        });
+                }
+            });
+        });
+    },
+
+    /**
+     *
+     * @param {string} collection - Name of the collection
      * @param {object} query - Filter. (Check Mongodb documentation)
      * @returns {Promise}
      */
