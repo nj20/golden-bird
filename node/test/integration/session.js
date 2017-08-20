@@ -187,7 +187,7 @@ describe('User', function()
         }
         //Setting the login session time to 1 second
         var defaultSessionTime = process.env.defaultLogInSessionTime;
-        process.env.defaultLogInSessionTime = 1;
+        process.env.defaultLogInSessionTime = 1000;
 
         user.add(userData).then(function(addResult)
         {
@@ -208,7 +208,7 @@ describe('User', function()
                             done(e);
                         }
                     });
-                }, (process.env.defaultLogInSessionTime) * 1000)
+                }, (process.env.defaultLogInSessionTime))
             });
         });
     });

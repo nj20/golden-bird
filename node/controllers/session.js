@@ -131,7 +131,7 @@ var verifyCredentials = function(userData, userCredentials)
     return password == userData.password && userData._id == userCredentials._id;
 }
 
-//start time is in unix timestamp and duration is in seconds
+//start time is in unix timestamp (milliseconds) and duration is in milliseconds
 var addSession = function(startTime, duration, userId)
 {
     return new Promise(function(fulfill, reject)
