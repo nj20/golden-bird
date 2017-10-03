@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var util = require('./routes/util');
 var order = require('./routes/order');
 var auth = require('./middleware/authentication');
+var cors = require('cors')
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors())
 
 app.use('/api', auth);
 app.use('/api/', index);

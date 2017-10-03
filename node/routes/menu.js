@@ -46,7 +46,6 @@ router.get("/", function(req, res, next)
 {
     if(req.headers.authStatus == 200)
     {
-        console.log(req.headers);
         menuController.getMenuWithRestaurantId(req.headers.restaurantid).then(function(result)
         {
             res.statusCode = result.status;
