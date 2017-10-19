@@ -28,8 +28,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
-app.use('/api', auth);
-app.use('/api/', index);
+app.use('/', auth);
+app.use('/', index);
 app.use('/api/util', util);
 app.use('/api/user', user);
 app.use('/api/restaurant', restaurant);

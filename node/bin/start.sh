@@ -10,5 +10,5 @@ source ../config/${DEPLOYMENT_GROUP_NAME}.env
 
 cd ..
 npm install
-forever start bin/www
+forever start --spinSleepTime 60000 --minUptime 1000 bin/www
 

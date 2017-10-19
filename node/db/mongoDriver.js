@@ -20,9 +20,15 @@ module.exports =
                 if(err)
                 {
                     reject(err);
+                    process.exit(1);
                 }
                 else
                 {
+                    db.on("close", function()
+                    {
+                        console.error("Disconnected from Mongodb");
+                        process.exit(1);
+                    });
                     fulfill(db);
                 }
             });

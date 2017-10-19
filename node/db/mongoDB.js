@@ -246,6 +246,7 @@ module.exports =
             {
                 if(err)
                 {
+                    console.log(err);
                     fulfill(
                     {
                         status: 500,

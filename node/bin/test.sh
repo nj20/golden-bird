@@ -15,7 +15,7 @@ source ./config/${DEPLOYMENT_GROUP_NAME}.env
 ./node_modules/mocha/bin/mocha --recursive
 
 #waits until the API is ready
-while [[ $(curl -s 'localhost/api/') != *'"available":true'* ]]
+while [[ $(curl -s 'localhost/') != *'"available":true'* ]]
 do
     :
 done
