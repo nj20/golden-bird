@@ -10,6 +10,7 @@ var menu = require('./routes/menu');
 var index = require('./routes/index');
 var util = require('./routes/util');
 var order = require('./routes/order');
+var rating = require('./routes/rating');
 var auth = require('./middleware/authentication');
 var cors = require('cors')
 
@@ -35,6 +36,7 @@ app.use('/api/user', user);
 app.use('/api/restaurant', restaurant);
 app.use('/api/menu', menu);
 app.use('/api/order', order);
+app.use('/api/rating', rating);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next)
